@@ -8,8 +8,25 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
+            
+      - name: Install Conan
+        id: conan
+        uses: turtlebrowser/get-conan@main
+
+      - name: Conan version
+        run: echo "${{ steps.conan.outputs.version }}"
+
+      - name: Conan detect profile
+        run: conan profile detect
+
+      - name: Conan install dependencies
+        run: conan install . --output-folder=${{github.workspace}}/build
+
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build --preset conan-release
+
       - name: Build project
-        uses: threeal/cmake-action@v1.3.0
-        with:
-          run-build: true
-          run-test: false
+        run: cd ${{github.workspace}}/build && cmake --build .
+
+      - name: Test project
+        run: cd ${{github.workspace}}/build && ctest .
