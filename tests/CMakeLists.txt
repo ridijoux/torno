@@ -1,6 +1,6 @@
 find_package(GTest REQUIRED)
 
-include_directories (${TORNO_SOURCE_DIR})
+include_directories (${TORNO_SOURCE_DIR}/src)
 add_executable(ranking_test ranking_test.cpp)
 
 target_link_libraries(ranking_test gtest::gtest core)
